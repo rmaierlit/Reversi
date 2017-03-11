@@ -1,0 +1,18 @@
+<doctype! html>
+<html>
+    <head>
+        <script src="./bowercomponents/angular/angular.js"></script>
+        <script src="./app.js"></script>
+    </head>
+    <body>
+        <div ng-app="app">
+            <div ng-view="view">
+                <table>
+                    <tr class="table-row" ng-repeat="row in board">
+                        <td class = "table-square" ng-repeat="space in row">"-"</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
