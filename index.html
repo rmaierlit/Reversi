@@ -1,18 +1,108 @@
 <doctype! html>
 <html>
     <head>
-        <script src="./bowercomponents/angular/angular.js"></script>
+        <script src="./bower_components/angular/angular.js"></script>
         <script src="./app.js"></script>
+        <style>
+            body{
+                background-color: 303030;
+            }
+            h1{
+                text-align: center;
+                font-size: 60px;
+                margin: 0px;
+                font-family: Georgia;
+                color: FCFAFF;
+            }
+            .app{
+                display:flex;
+                flex-direction: column;
+                justify-content: center;
+                height: 100%;
+
+            }
+            .title{
+                display:flex;
+                justify-content: center;
+            }
+            .reversed{
+                transform: scale(-1,1);
+            }
+            .board-wrapper{
+                display: flex;
+                justify-content: center;
+            }
+            .board{
+                background-color: mediumseagreen;
+                border: 4px solid green;
+            }
+            .table-square{
+                background-color: seagreen;
+                width: 60px;
+                height: 60px;
+                position: relative;
+            }
+            .p {
+                width: 48px;
+                height: 48px;
+                border-radius: 100%;
+                border: 3px solid;
+                position: absolute;
+                top: 50%; 
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+            .w {
+                background-color: ghostwhite;
+                border-color: lightgray;
+            }
+
+            .b {
+                background-color: 202020;
+                border-color: darkslategray;
+            }
+
+            .o {
+                opacity: 0.2;
+                transition: all 0.1s;
+            }
+
+            .hover.o {
+                opacity: 0.6;
+                width: 52;
+                height: 52;
+            }
+        </style>
     </head>
     <body>
-        <div ng-app="app">
-            <div ng-view="view">
-                <table>
-                    <tr class="table-row" ng-repeat="row in board">
-                        <td class = "table-square" ng-repeat="space in row">"-"</td>
+        <div class="app" ng-app="App">
+
+            <div class="title">
+                <h1 class="reversed">
+                    eR
+                </h1>
+                <h1>
+                    V
+                </h1>
+                <h1>
+                    ersi
+                </hi>
+            </div>
+
+            <div class="board-wrapper" ng-controller="Game as game">
+                <table class="board">
+                    <tr class="table-row" ng-repeat="row in game.board track by $index">
+                        <td class = "table-square" ng-repeat="space in row track by $index">
+                            
+                            <div ng-class="[space.classes, {hover: space.hover}]"
+                                 ng-mouseenter="space.hover = true" 
+                                 ng-mouseleave="space.hover = false"></div>
+
+                        </td>
                     </tr>
                 </table>
             </div>
+
         </div>
     </body>
 </html>
