@@ -42,7 +42,7 @@
                 height: 60px;
                 position: relative;
             }
-            .p {
+            .black, .white {
                 width: 48px;
                 height: 48px;
                 border-radius: 100%;
@@ -52,22 +52,22 @@
                 left: 50%;
                 transform: translate(-50%, -50%);
             }
-            .w {
+            .white {
                 background-color: ghostwhite;
                 border-color: lightgray;
             }
 
-            .b {
+            .black {
                 background-color: 202020;
                 border-color: darkslategray;
             }
 
-            .o {
+            .option {
                 opacity: 0.2;
                 transition: all 0.1s;
             }
 
-            .hover.o {
+            .hover.option {
                 opacity: 0.6;
                 width: 52;
                 height: 52;
@@ -91,10 +91,15 @@
 
             <div class="board-wrapper" ng-controller="Game as game">
                 <table class="board">
-                    <tr class="table-row" ng-repeat="row in game.board track by $index">
-                        <td class = "table-square" ng-repeat="space in row track by $index">
+                    <tr class="table-row" 
+                        ng-repeat="row in game.board track by $index"
+                        ng-init="rowIndex = $index">
+                        <td class = "table-square" 
+                            ng-repeat="space in row track by $index"
+                            ng-init="columnIndex = $index">
                             
-                            <div ng-class="[space.classes, {hover: space.hover}]"
+                            <div ng-class="space"
+                                 ng-click="game.click(rowIndex, columnIndex, space)"
                                  ng-mouseenter="space.hover = true" 
                                  ng-mouseleave="space.hover = false"></div>
 
