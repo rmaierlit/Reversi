@@ -1,0 +1,23 @@
+{
+  "name": "reversi",
+  "version": "0.1.0",
+  "description": "reversi web app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rmaierlit/Reversi.git"
+  },
+  "author": "rmaierlit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rmaierlit/Reversi/issues"
+  },
+  "homepage": "https://github.com/rmaierlit/Reversi#readme",
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}
