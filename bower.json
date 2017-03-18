@@ -4,7 +4,7 @@
     "Robert Littlejohn <bbblittlejohn@gmail.com>"
   ],
   "description": "Board Game Demonstrating UI/UX",
-  "main": "index.html",
+  "main": "client/index.html",
   "license": "MIT",
   "homepage": "",
   "private": true,
@@ -13,7 +13,8 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "client/lib"
   ],
   "dependencies": {
     "angular": "^1.6.3"
