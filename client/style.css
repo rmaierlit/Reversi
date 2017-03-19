@@ -1,36 +1,51 @@
-body{
-    background-color: 303030;
+.preload {
+    transition: none !important;
 }
-h1{
+.preload * {
+    display: none !important;
+    transition: none !important;
+}
+body {
+    background-color: 303030;
+    transition: background-color 1s 0.3s;
+}
+.whiteBackground {
+    background-color: FCFAFF;
+}
+h1 {
     text-align: center;
     font-size: 60px;
     margin: 0px;
     font-family: Georgia;
+    transition: color 1s 0.8s;
     color: FCFAFF;
 }
-.app{
+.whiteBackground h1 {
+    color: 303030;
+}
+.app {
     display:flex;
     flex-direction: column;
     justify-content: center;
     height: 100%;
 
 }
-.title{
+.title {
     display:flex;
     justify-content: center;
 }
-.reversed{
+.reversed {
     transform: scale(-1,1);
 }
-.board-wrapper{
+.board-wrapper {
     display: flex;
     justify-content: center;
 }
-.board{
+.board {
     background-color: mediumseagreen;
     border: 4px solid green;
 }
-.table-square{
+.table-square {
     background-color: seagreen;
     width: 60px;
     height: 60px;
@@ -45,6 +60,8 @@ h1{
     top: 50%; 
     left: 50%;
     transform: translate(-50%, -50%);
+    transition: color 0.3s;
+    transition: background-color 0.3s;
 }
 .white, .opwhite {
     background-color: ghostwhite;

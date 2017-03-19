@@ -1,14 +1,14 @@
 <doctype! html>
 <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="style.css" />
         <script src="./lib/angular/angular.js"></script>
         <script src="./app.js"></script>
-        <link rel="stylesheet" type="text/css" href="style.css" />
     </head>
-    <body>
-        <div class="app" ng-app="App">
+    <body class="preload">
+        <div ng-app="App" class="app">
 
-            <div class="title">
+            <div class='title'>
                 <h1 class="reversed">
                     eR
                 </h1>
@@ -20,8 +20,8 @@
                 </hi>
             </div>
 
-            <div class="board-wrapper" ng-controller="Game as game">
-                <table class="board" ng-init="game.debug.log('angular', game.board)">
+            <div class="board-wrapper">
+                <table class="board" ng-controller="Game as game">
 
                     <tr class="table-row" 
                         ng-repeat="row in game.state.board track by $index"
@@ -33,10 +33,10 @@
                             
                             <!-- this div is for the game pieces -->
                             <div ng-class="[game.evalClass(space), {hover: hovering}]"
-                                 ng-init="hovering = false"
-                                 ng-click="game.click(rowIndex, columnIndex, space)"
-                                 ng-mouseenter="hovering = true" 
-                                 ng-mouseleave="hovering = false"></div>
+                                ng-init="hovering = false"
+                                ng-click="game.click(rowIndex, columnIndex, space)"
+                                ng-mouseenter="hovering = true" 
+                                ng-mouseleave="hovering = false"></div>
 
                         </td>
                     </tr>
