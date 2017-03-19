@@ -22,17 +22,21 @@
 
             <div class="board-wrapper" ng-controller="Game as game">
                 <table class="board">
+
                     <tr class="table-row" 
                         ng-repeat="row in game.board track by $index"
                         ng-init="rowIndex = $index">
+
                         <td class = "table-square" 
                             ng-repeat="space in row track by $index"
                             ng-init="columnIndex = $index">
                             
-                            <div ng-class="space"
+                            <!-- this div is for the game pieces -->
+                            <div ng-class="[game.evalClass(space), {hover: hovering}]"
+                                 ng-init="hovering = false"
                                  ng-click="game.click(rowIndex, columnIndex, space)"
-                                 ng-mouseenter="space.hover = true" 
-                                 ng-mouseleave="space.hover = false"></div>
+                                 ng-mouseenter="hovering = true" 
+                                 ng-mouseleave="hovering = false"></div>
 
                         </td>
                     </tr>

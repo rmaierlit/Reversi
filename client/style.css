@@ -36,7 +36,7 @@ h1{
     height: 60px;
     position: relative;
 }
-.black, .white {
+.black, .white, .opwhite, .opblack {
     width: 48px;
     height: 48px;
     border-radius: 100%;
@@ -46,22 +46,22 @@ h1{
     left: 50%;
     transform: translate(-50%, -50%);
 }
-.white {
+.white, .opwhite {
     background-color: ghostwhite;
     border-color: lightgray;
 }
 
-.black {
+.black, .opblack {
     background-color: 202020;
     border-color: darkslategray;
 }
 
-.option {
-    opacity: 0.2;
+.opwhite, .opblack {
+    opacity: 0.3;
     transition: all 0.1s;
 }
 
-.hover.option {
+.hover.opwhite, .hover.opblack {
     opacity: 0.6;
     width: 52;
     height: 52;
