@@ -21,10 +21,10 @@
             </div>
 
             <div class="board-wrapper" ng-controller="Game as game">
-                <table class="board">
+                <table class="board" ng-init="game.debug.log('angular', game.board)">
 
                     <tr class="table-row" 
-                        ng-repeat="row in game.board track by $index"
+                        ng-repeat="row in game.state.board track by $index"
                         ng-init="rowIndex = $index">
 
                         <td class = "table-square" 

@@ -1,50 +1,55 @@
 angular.module('App', [])
-    .controller('Game', ['$log', function($log){
-
-        const n = 8;
-        var board = [];
-        for (let i = 0; i < n; i++){
-            let line = [];
-            for (let j = 0; j < n; j++) {
-                line.push(0);
-            }
-            board.push(line);
-        }
+    .controller('Game', ['$log', '$http', '$scope', function($log, $http, $scope){
 
         const classesByCode = {
              '0': 'empty',
-             '1': 'white',
-            '-1': 'black',
-             '2': 'opwhite',
-            '-2': 'opblack',
+             '1': 'black',
+            '-1': 'white',
+             '2': 'opblack',
+            '-2': 'opwhite',
         }
 
-        var methods = {};
+        var updateBoard = function(game) {
+            let row, column;
+            for (var i = 0; i < game.openMoves.length; i++){
+                [row, column] = game.openMoves[i];
+                console.log(row, column);
+                game.board[row][column] = game.player * 2;
+                //for player white (i.e. 1) will set square to be 2 ('open for white');
+            }
+            console.log(game);
+            public.state.board = game.board;
+        }
 
-        methods.debug = $log;
+        var public = {};
 
-        methods.click = function(row, column, space) {
+        public.state = {}
+
+        public.state.board = [[]];
+
+        public.debug = $log;
+
+        public.click = function(row, column, space) {
             if(space === 2 || space == -2){
                 //if space is a white or black open move
                 this.debug.log(row, column);
             }
         }
 
-        methods.evalClass = function(code){
+        public.evalClass = function(code){
             return classesByCode[code];
         }
-        
-        
-        board[3][3] = 1;
-        board[4][4] = 1;
-        board[3][4] = -1;
-        board[4][3] = -1;
 
-        board[2][4] = 2;
+        public.getBoard = function(){
+            $http({
+                method: 'GET',
+                url: '/games/name'
+            }).then(response => updateBoard(response.data), error => {
+                $log.error(error)
+            });
+        }
 
+        public.getBoard();
 
-        board[4][5] = -2;
-
-
-        angular.extend(this, {board: board}, methods);
+        angular.extend(this, public);
     }]);
