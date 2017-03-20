@@ -7,7 +7,7 @@
 }
 body {
     background-color: 303030;
-    transition: background-color 1s 0.3s;
+    transition: background-color 1s 0.5s;
 }
 .whiteBackground {
     background-color: FCFAFF;
@@ -51,18 +51,23 @@ h1 {
     height: 60px;
     position: relative;
 }
-.black, .white, .opwhite, .opblack {
+.piece{
     width: 48px;
     height: 48px;
     border-radius: 100%;
-    border: 3px solid;
     position: absolute;
     top: 50%; 
     left: 50%;
     transform: translate(-50%, -50%);
-    transition: color 0.3s;
-    transition: background-color 0.3s;
+    transition: border-color 0.5s, background-color 0.5s;
+    background-color: gray;
+    border: 3px solid;
+    border-color: gray;
 }
+.empty{
+  opacity: 0;
+}
+
 .white, .opwhite {
     background-color: ghostwhite;
     border-color: lightgray;
@@ -75,7 +80,11 @@ h1 {
 
 .opwhite, .opblack {
     opacity: 0.3;
-    transition: all 0.1s;
+    transition: width 0.1s, height 0.1s;
+}
+
+.updating .opwhite, .updating .opblack {
+    visibility: hidden;
 }
 
 .hover.opwhite, .hover.opblack {

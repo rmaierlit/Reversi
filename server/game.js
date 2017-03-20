@@ -32,6 +32,7 @@ function Game(n){
 
     this.player = black;
     this.openMoves = [];
+    this.ended = false;
 }
 
 Game.prototype.outOfBounds = function(number) {
@@ -51,6 +52,10 @@ Game.prototype.atSpace = function(row, column){
 
 Game.prototype.setSpace = function(row, column){
     this.board[row][column] = this.player;
+}
+
+Game.prototype.changePlayer = function(){
+    ourGame.player = -(ourGame.player); //change player between black and white
 }
 
 Game.prototype.evalSpace = function(state, coords){
@@ -149,7 +154,7 @@ Game.prototype.findMinorD = function() {
         this.evalSequence([i,0], directions['upright']);
     }
     for (var i = 1; i < this.n - 2; i++) {
-        this.evalSequence([i,0], directions['upright']);
+        this.evalSequence([this.n - 1, i], directions['upright']);
     }
 }
 
@@ -181,11 +186,15 @@ methods.makeMove = function(req, res) {
     } else{
         ourGame.setSpace(row, column);
         ourGame.flipFrom(row, column);
-
-        ourGame.player = -(ourGame.player); //change player between black and white
+        ourGame.changePlayer();
         ourGame.findOpenMoves();
     }
 
+    res.send(ourGame);
+}
+
+methods.resetGame = function(req, res){
+    ourGame = newGame(8);
     res.send(ourGame);
 }
 

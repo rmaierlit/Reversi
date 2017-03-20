@@ -1,5 +1,5 @@
 angular.module('App', [])
-    .controller('Game', ['$log', '$http', function($log, $http){
+    .controller('Game', ['$log', '$http', '$timeout', function($log, $http, $timeout){
 
         const classesByCode = {
              '0': 'empty',
@@ -23,15 +23,25 @@ angular.module('App', [])
             public.state.player = game.player;
 
 
-            let body = document.querySelector('body');
-            body.classList.remove(public.background(-(game.player)));
-            body.classList.add(public.background(game.player));
+            document.body.classList.remove(public.background(-(game.player)));
+            document.body.classList.add(public.background(game.player));
+
             if(preload){
-                body.classList.remove('preload');
+                //avoids intial css transition
+                document.body.classList.remove('preload');
                 preload = false;
+            } else{
+                //removes update class applied when move was sent over http
+                $timeout(updateDone, 1200);
             }
+
         }
 
+        var updateDone = function() {
+            document.body.classList.remove('updating');
+        }
+
+        //methods accessable in scope
         var public = {};
 
         public.state = {}
@@ -48,6 +58,7 @@ angular.module('App', [])
         public.click = function(row, column, space) {
             if(space === 2 || space === -2){
                 //if space is a white or black open move matching current player
+                document.body.classList.add('updating');
                 let data = {row, column, player: public.state.player}
                 $http.post('/games/name', data)
                     .then(response => updateBoard(response.data),

@@ -32,7 +32,7 @@
                             ng-init="columnIndex = $index">
                             
                             <!-- this div is for the game pieces -->
-                            <div ng-class="[game.evalClass(space), {hover: hovering}]"
+                            <div ng-class="['piece', game.evalClass(space), {hover: hovering}]"
                                 ng-init="hovering = false"
                                 ng-click="game.click(rowIndex, columnIndex, space)"
                                 ng-mouseenter="hovering = true" 
