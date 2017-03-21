@@ -12,16 +12,14 @@ angular.module('App', [])
         var preload = true;
 
         var updateBoard = function(game) {
-            let row, column;
-
-            for (var i = 0; i < game.openMoves.length; i++){
-                [row, column] = game.openMoves[i].split(' ');
+            game.openMoves.forEach( move => {
+                let [row, column] = move.split(' ');
                 game.board[row][column] = game.player * 2;
-                //for player white (i.e. 1) will set square to be 2 ('open for white');
-            }
+                //for player white (i.e. -1) will set square to be -2 ('open for white');
+            });
             public.state.board = game.board;
             public.state.player = game.player;
-
+            $log.log(game.pieceCount, 'winner =', game.winner);
 
             document.body.classList.remove(public.background(-(game.player)));
             document.body.classList.add(public.background(game.player));
@@ -32,9 +30,8 @@ angular.module('App', [])
                 preload = false;
             } else{
                 //removes update class applied when move was sent over http
-                $timeout(updateDone, 1200);
+                $timeout(updateDone, 1300);
             }
-
         }
 
         var updateDone = function() {
@@ -79,8 +76,6 @@ angular.module('App', [])
         }
 
         public.getBoard();
-
-        
 
         angular.extend(this, public);
     }]);

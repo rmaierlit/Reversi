@@ -31,8 +31,17 @@ function Game(n){
     this.board[4][3] = black;
 
     this.player = black;
-    this.openMoves = [];
-    this.ended = false;
+
+    this.pieceCount = {
+         "1": 2,
+        "-1": 2
+    };
+
+    this.openSet = new Set(); //stores the open moves on the server
+    this.openMoves = []; //array format for sending moves to the client
+    this.blocked = 0; //1 if black player had no moves, -1 if white player had no moves
+    this.winner = 99; //1 for black, -1 for white, 0 for tie, 99 for "no winner yet"
+    this.findOpenMoves();
 }
 
 Game.prototype.outOfBounds = function(number) {
@@ -51,7 +60,12 @@ Game.prototype.atSpace = function(row, column){
 }
 
 Game.prototype.setSpace = function(row, column){
+    if (this.atSpace(row, column) === -(this.player)){
+        //subtract one from oppenents count if you are flipping his piece.
+        this.pieceCount[-(this.player)]--;
+    }
     this.board[row][column] = this.player;
+    this.pieceCount[this.player]++;
 }
 
 Game.prototype.changePlayer = function(){
@@ -73,14 +87,14 @@ Game.prototype.evalSpace = function(state, coords){
     if (space === this.player && state.last === -(this.player)){
         state.closed = false;
         if (state.open !== null){
-            this.openMoves.push(state.open);
+            this.openSet.add(state.open);
             state.open = null;
         }
     } else if (space === -(this.player) && state.last === this.player) {
         state.closed = true;
         state.open = null;
     } else if (space === empty && state.closed) {
-        this.openMoves.push([row, column].join(' '));
+        this.openSet.add([row, column].join(' '));
         state.closed = false;
     } else if (space === empty) {
         state.open = [row, column].join(' ');
@@ -105,6 +119,12 @@ Game.prototype.evalSequence = function(coords, mod){
 
     } while (!state.end) //until the function ends up out of bounds
 
+}
+
+Game.prototype.countFlip = function(player){
+    //update the count when a piece is flipped
+    this.pieceCount[player]++; //add one to the players color
+    this.pieceCount[-(player)]--; //subtract one from the oppenents color
 }
 
 Game.prototype.flip = function(row, column, mod) {
@@ -159,43 +179,80 @@ Game.prototype.findMinorD = function() {
 }
 
 Game.prototype.findOpenMoves = function(){
-    this.openMoves = [];
+    this.openSet.clear();
     this.findHorizontal();
     this.findVertical();
     this.findMajorD();
     this.findMinorD();
+    this.openMoves = [...this.openSet]; //spread operator creates an array from the set
 }
 
-ourGame = new Game(8);
-
-methods = {}
-
-methods.getState = function(req, res) {
-    ourGame.findOpenMoves();
-    res.send(ourGame);
+Game.prototype.checkForBlocked = function() {
+    if (this.openMoves.length === 0) {
+        //if a player has no moves, their turn is skipped; find moves for the other player
+        this.blocked = this.player;
+        this.changePlayer();
+        this.findOpenMoves();
+    } else {
+        this.blocked = 0;
+    }
 }
 
-methods.makeMove = function(req, res) {
-    let row = req.body.row;
-    let column = req.body.column;
-    let player = req.body.player;
+Game.prototype.checkForWinner = function() {
+    if (this.openMoves.length === 0){
+        //at this point, no moves in the move list would mean neither player had a move open
+        //this would mean the game is over and the winner must be determined
+        this.calculateWinner();
+    }
+}
 
-    if ( player !== ourGame.player || !ourGame.openMoves.includes([row, column].join(' ')) ){
+Game.prototype.calculateWinner = function() {
+    //when the game is oven, the game is over, and whoever has the most pieces on the board wins
+    if (this.pieceCount[black] > this.pieceCount[white]){
+            this.winner = black;
+        } else if (this.pieceCount[white] > this.pieceCount[black]){
+            this.winner = white;
+        } else {
+            //if the counts are equal, set winner to zero, meaning a tie
+            this.winner = 0;
+        }
+}
+
+Game.prototype.makeMove = function(row, column, player) {
+    if ( player !== this.player || !this.openMoves.includes([row, column].join(' ')) ){
         //invalid move, client data doesn't match with what's on the server;
         console.warn('Invalid Move!');
     } else{
-        ourGame.setSpace(row, column);
-        ourGame.flipFrom(row, column);
-        ourGame.changePlayer();
-        ourGame.findOpenMoves();
+        this.setSpace(row, column);
+        this.flipFrom(row, column);
+        this.changePlayer();
+        this.findOpenMoves();
+        this.checkForBlocked();
+        this.checkForWinner();
     }
-
-    res.send(ourGame);
 }
 
-methods.resetGame = function(req, res){
-    ourGame = newGame(8);
-    res.send(ourGame);
+var ourGame = new Game(8);
+
+var helpers = {
+
+    getBoardState: function(req, res) {
+        res.send(ourGame);
+    },
+
+    submitMove: function(req, res) {
+        let row = req.body.row;
+        let column = req.body.column;
+        let player = req.body.player;
+
+        ourGame.makeMove(row, column, player);
+        res.send(ourGame);
+    },
+
+    resetGame: function(req, res){
+        ourGame = newGame(8);
+        res.send(ourGame);
+    },
 }
 
-module.exports = methods;
+module.exports = helpers;

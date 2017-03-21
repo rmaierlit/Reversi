@@ -4,7 +4,7 @@ var game = require('./game.js');
 module.exports = function (server, express) {
     //server.get('/games', ##get games list##);
     //server.post('/games', ##create new game##);
-    server.get('/games/name', game.getState);
+    server.get('/games/name', game.getBoardState);
 
-    server.post('/games/name', jsonParser, game.makeMove);
+    server.post('/games/name', jsonParser, game.submitMove);
 }
