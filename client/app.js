@@ -8,21 +8,34 @@ angular.module('App', [])
              '2': 'opblack',
             '-2': 'opwhite',
         }
+
+        const winnerByCode = {
+             '0': 'Tie',
+             '1': 'Black Wins!',
+            '-1': 'White Wins!'
+        }
         
         var preload = true;
 
-        var updateBoard = function(game) {
-            game.openMoves.forEach( move => {
+        var updateBoard = function(updated) {
+            updated.openMoves.forEach( move => {
                 let [row, column] = move.split(' ');
-                game.board[row][column] = game.player * 2;
+                updated.board[row][column] = updated.player * 2;
                 //for player white (i.e. -1) will set square to be -2 ('open for white');
             });
-            public.state.board = game.board;
-            public.state.player = game.player;
-            $log.log(game.pieceCount, 'winner =', game.winner);
 
-            document.body.classList.remove(public.background(-(game.player)));
-            document.body.classList.add(public.background(game.player));
+            public.state.board = updated.board;
+
+            if ( updated.winner !== 99){
+                public.state.player = updated.winner;
+                public.state.message = winnerByCode[updated.winner];
+                document.body.className = public.background(updated.winner);
+                $timeout(gameWon, 650);
+            } else{
+                public.state.player = updated.player;
+                document.body.classList.remove(public.background(-(updated.player)));
+                document.body.classList.add(public.background(updated.player));
+            }
 
             if(preload){
                 //avoids intial css transition
@@ -38,10 +51,14 @@ angular.module('App', [])
             document.body.classList.remove('updating');
         }
 
+        var gameWon = function() {
+            public.state.isWinner = true;
+        }
+
         //methods accessable in scope
         var public = {};
 
-        public.state = {}
+        public.state = {};
 
         public.state.board = [[]];
         public.state.player = -1;

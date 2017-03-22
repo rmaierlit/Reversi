@@ -20,8 +20,8 @@
                 </h1>
             </div>
 
-            <div class="board-wrapper">
-                <table class="board" ng-controller="Game as game">
+            <div class="board-wrapper" ng-controller="Game as game">
+                <table class="board">
 
                     <tr class="table-row" 
                         ng-repeat="row in game.state.board track by $index"
@@ -41,8 +41,10 @@
                         </td>
                     </tr>
                 </table>
-                <div class="message">
-                    Black Wins!
+                <div class="message-wrapper">
+                    <div ng-class="['message', {winner: game.state.isWinner}]">
+                        {{game.state.message}}
+                    </div>
                 </div>
             </div>
 
