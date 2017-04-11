@@ -42,7 +42,8 @@
                     </tr>
                 </table>
                 <div class="message-wrapper">
-                    <div ng-class="['message', {winner: game.state.isWinner}]">
+                    <div ng-class="['message', {winner: game.state.isWinner}]"
+                         ng-click="game.reset()">
                         {{game.state.message}}
                     </div>
                 </div>

@@ -7,4 +7,7 @@ module.exports = function (server, express) {
     server.get('/games/name', game.getBoardState);
 
     server.post('/games/name', jsonParser, game.submitMove);
+
+    //not RESTful
+    server.post('/games/name/reset', game.resetGame);
 }

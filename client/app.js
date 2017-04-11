@@ -33,6 +33,7 @@ angular.module('App', [])
                 $timeout(gameWon, 650);
             } else{
                 public.state.player = updated.player;
+                public.state.isWinner = false;
                 document.body.classList.remove(public.background(-(updated.player)));
                 document.body.classList.add(public.background(updated.player));
             }
@@ -87,6 +88,13 @@ angular.module('App', [])
 
         public.getBoard = function(){
             $http.get('/games/name')
+                .then(response => updateBoard(response.data),
+                      error => $log.error(error)
+                );
+        }
+
+        public.reset = function(){
+            $http.post('/games/name/reset')
                 .then(response => updateBoard(response.data),
                       error => $log.error(error)
                 );

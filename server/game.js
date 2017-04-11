@@ -250,7 +250,7 @@ var helpers = {
     },
 
     resetGame: function(req, res){
-        ourGame = newGame(8);
+        ourGame = new Game(8);
         res.send(ourGame);
     },
 }
